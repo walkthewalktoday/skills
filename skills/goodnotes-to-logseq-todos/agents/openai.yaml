@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goodnotes 转 Logseq TODO"
+  short_description: "识别 Goodnotes 手写笔记并写入 Logseq 今日 TODO"
+  default_prompt: "使用 $goodnotes-to-logseq-todos 把今天的 Goodnotes 工作随笔逐项写入 Logseq 今日 TODO。"
