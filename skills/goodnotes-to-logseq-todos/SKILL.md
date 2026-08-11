@@ -1,55 +1,55 @@
 ---
 name: goodnotes-to-logseq-todos
-description: Read a dated handwritten Goodnotes work-note PDF from a Google Drive desktop mount, transcribe each numbered note into a separate TODO, and safely insert the tasks under the matching Logseq journal's 今日TODO block. Use when the user asks to sync, import, summarize, or write today's or a specified date's Goodnotes notes into Logseq TODOs on Windows or macOS.
+description: 从 Google Drive 桌面挂载目录读取指定日期的 Goodnotes 手写工作笔记 PDF，把每个编号事项转写为独立 TODO，并安全插入对应 Logseq 日志的“今日TODO”块。用户要求同步、导入、整理或写入今天或指定日期的 Goodnotes 笔记到 Logseq TODO 时使用，支持 Windows 与 macOS。
 ---
 
-# Goodnotes To Logseq TODOs
+# Goodnotes 转 Logseq TODO
 
-Convert one dated Goodnotes work-note PDF into ordered Logseq TODO blocks while preserving the journal's existing content and dirty-worktree state.
+把指定日期的 Goodnotes 手写工作笔记 PDF 转换为有序的 Logseq TODO 块，同时保留日志原有内容和工作区中的未提交修改。
 
-## Resolve the date and paths
+## 确定日期与路径
 
-1. Use the explicit date from the request; otherwise use today's date in the user's local timezone.
-2. Use an explicit source or Logseq graph path from the user when provided.
-3. Otherwise, look for the exact `YYYYMMDD.pdf` only in these narrow candidates:
-   - Windows personal default: `G:\我的云端硬盘\GoodNotes\工作随笔\YYYYMMDD.pdf`
-   - Windows Google Drive volumes visible in File Explorer, under `My Drive` or `我的云端硬盘/GoodNotes/工作随笔`
-   - macOS Google Drive locations visible in Finder, commonly under `~/Library/CloudStorage/GoogleDrive-*/My Drive/GoodNotes/工作随笔`
-4. Prefer an exact local file. Do not use a browser or Drive connector when it exists.
-5. If the local file is absent, use an available Google Drive connector to locate the exact dated file under `GoodNotes/工作随笔`.
-6. If zero or multiple candidates remain, ask the user. Do not guess from a fuzzy date or search an entire disk.
-7. Treat Google Drive as read-only for this workflow.
+1. 用户指定日期时使用该日期；否则使用用户所在时区的当天日期。
+2. 用户明确提供源文件或 Logseq 图谱路径时，优先使用该路径。
+3. 未提供源文件路径时，只在以下有限候选位置查找准确的 `YYYYMMDD.pdf`：
+   - Windows 个人默认位置：`G:\我的云端硬盘\GoodNotes\工作随笔\YYYYMMDD.pdf`
+   - Windows 文件资源管理器可见的 Google Drive 盘符下：`My Drive/GoodNotes/工作随笔` 或 `我的云端硬盘/GoodNotes/工作随笔`
+   - macOS Finder 可见的 Google Drive 位置，通常位于 `~/Library/CloudStorage/GoogleDrive-*/My Drive/GoodNotes/工作随笔`
+4. 优先读取准确的本地文件。只要本地文件存在，就不要改用浏览器或 Google Drive 连接器。
+5. 本地文件不存在时，使用可用的 Google Drive 连接器，在 `GoodNotes/工作随笔` 下查找日期完全匹配的文件。
+6. 找不到文件或存在多个候选文件时，询问用户。不要根据模糊日期猜测，也不要扫描整块磁盘。
+7. 在本流程中只读 Google Drive，不要修改云端文件。
 
-Resolve the Logseq graph in this order:
+按以下顺序确定 Logseq 图谱：
 
-1. Use the path supplied by the user.
-2. Use the current graph reported by a running Logseq API.
-3. Use `D:\github.com\logseq` when it exists as the personal default.
-4. Otherwise ask for the graph directory.
+1. 使用用户提供的路径。
+2. 使用正在运行的 Logseq API 返回的当前图谱。
+3. 当 `D:\github.com\logseq` 存在时，将其作为个人默认路径。
+4. 仍无法确定时，询问用户图谱目录。
 
-For file graphs, target `journals/YYYY_MM_DD.md`. Adapt through the Logseq API for a DB graph instead of assuming a journal Markdown file.
+对于文件型图谱，目标文件为 `journals/YYYY_MM_DD.md`。对于 DB 图谱，通过 Logseq API 写入，不要假定存在日志 Markdown 文件。
 
-## Inspect before writing
+## 写入前检查
 
-1. Read the available Logseq and PDF skills.
-2. Inspect targeted Git status in the resolved Logseq graph and read the journal as UTF-8.
-3. Preserve all pre-existing and unrelated changes. Never commit, pull, rebase, or push unless the user explicitly asks.
-4. Check the existing `今日TODO` block and collect its TODO text for duplicate detection.
+1. 读取当前可用的 Logseq 与 PDF Skill。
+2. 检查目标 Logseq 图谱的 Git 状态，并以 UTF-8 读取目标日志。
+3. 保留所有已有及无关修改。除非用户明确要求，否则不要执行提交、拉取、变基或推送。
+4. 检查现有“今日TODO”块，收集已有 TODO 文本，用于重复检测。
 
-## Read the handwritten PDF
+## 读取手写 PDF
 
-1. Render every PDF page to high-resolution PNG with Poppler or the available PDF renderer. Do not rely on PDF text extraction; Goodnotes handwriting often has no text layer.
-2. Visually inspect every rendered page. Use focused high-resolution page crops when handwriting is hard to read.
-3. Preserve the source order and hierarchy:
-   - Convert each numbered top-level note into exactly one TODO.
-   - Merge subordinate lines into that TODO using semicolons or parentheses.
-   - Keep technical identifiers verbatim.
-4. Do not invent unclear handwriting. Use `[字迹待确认：…]` for an uncertain fragment, or ask the user when uncertainty changes the task's meaning.
+1. 使用 Poppler 或可用的 PDF 渲染器，把 PDF 的每一页渲染为高分辨率 PNG。不要依赖 PDF 文本提取；Goodnotes 手写笔记通常没有文本层。
+2. 逐页目视检查渲染图片。字迹难以辨认时，使用高分辨率局部裁剪继续确认。
+3. 保留原始顺序和层级：
+   - 每个顶层编号事项只转换为一条 TODO。
+   - 使用分号或括号把下级说明合并进对应 TODO。
+   - 技术标识符保持原样。
+4. 不要臆测模糊字迹。无法确认的片段使用 `[字迹待确认：…]`；当不确定内容会改变任务含义时，询问用户。
 
-## Write the journal
+## 写入日志
 
-1. Prefer the Logseq API when available. Otherwise edit the journal file with a minimal patch.
-2. Insert tasks as child blocks under the exact `- 今日TODO` block using the file's existing indentation style:
+1. Logseq API 可用时优先使用 API；否则用最小补丁编辑日志文件。
+2. 按文件原有缩进格式，把任务作为子块插入准确的 `- 今日TODO` 块：
 
    ```markdown
    - 今日TODO
@@ -57,13 +57,13 @@ For file graphs, target `journals/YYYY_MM_DD.md`. Adapt through the Logseq API f
      - TODO 第二项
    ```
 
-3. Replace only an empty placeholder child when present. Never replace existing TODOs, journal queries, `今日主题`, properties, or unrelated blocks.
-4. If `今日TODO` is missing, append that block without restructuring the journal. If the journal is missing, create only the minimal structure consistent with adjacent journal files.
-5. Skip an item already present after trimming whitespace and the task marker. Do not duplicate tasks across repeated runs.
+3. 存在空占位子块时，只替换该占位。不要替换已有 TODO、日志查询、“今日主题”、属性或其他无关块。
+4. 不存在“今日TODO”时，在不重构日志的前提下追加该块。日志文件不存在时，只创建与相邻日志一致的最小结构。
+5. 去掉空白与任务标记后，若某事项已存在，则跳过它。重复执行时不要生成重复任务。
 
-## Verify and report
+## 验证并报告
 
-1. Re-read the journal and verify the inserted count, original order, preserved surrounding content, and targeted Git status.
-2. Clean up temporary PDF renders.
-3. Report the source PDF, target journal, inserted and skipped counts, and any `[字迹待确认]` fragments.
-4. State that changes remain uncommitted unless the user asked for Git operations.
+1. 重新读取日志，核对新增数量、原始顺序、周边内容是否保留，以及目标 Git 状态。
+2. 清理临时生成的 PDF 页面图片。
+3. 报告源 PDF、目标日志、新增与跳过数量，以及所有 `[字迹待确认]` 片段。
+4. 除非用户要求执行 Git 操作，否则说明修改仍未提交。

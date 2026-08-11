@@ -1,33 +1,33 @@
-# skills
+# Skills
 
-Reusable agent skills maintained by [walkthewalktoday](https://github.com/walkthewalktoday).
+由 [walkthewalktoday](https://github.com/walkthewalktoday) 维护的可复用 Agent Skills。
 
-## Install
+## 安装
 
-List the skills in this repository:
+列出仓库中的 Skills：
 
 ```bash
 npx skills add walkthewalktoday/skills --list
 ```
 
-Install `goodnotes-to-logseq-todos` globally for Codex:
+为 Codex 全局安装 `goodnotes-to-logseq-todos`：
 
 ```bash
 npx skills add walkthewalktoday/skills --skill goodnotes-to-logseq-todos --agent codex --global
 ```
 
-Add `-y` for a non-interactive installation.
+需要非交互安装时，在命令中加入 `-y`。
 
-## Available skills
+## 可用 Skills
 
 ### goodnotes-to-logseq-todos
 
-Read a dated handwritten Goodnotes PDF from a Google Drive desktop mount, turn each numbered note into a separate TODO, and safely insert the tasks under the matching Logseq journal's `今日TODO` block.
+从 Google Drive 桌面挂载目录读取指定日期的 Goodnotes 手写 PDF，把每个编号事项转换为独立 TODO，并安全插入对应 Logseq 日志的“今日TODO”块。
 
-Example prompt:
+调用示例：
 
 ```text
-Use $goodnotes-to-logseq-todos to sync today's Goodnotes work notes into my Logseq TODOs.
+使用 $goodnotes-to-logseq-todos，把今天的 Goodnotes 工作随笔同步到 Logseq TODO。
 ```
 
-The skill treats Google Drive as read-only, preserves unrelated Logseq content, avoids duplicate tasks, exposes uncertain handwriting, and does not commit or push the Logseq repository unless explicitly requested.
+该 Skill 只读 Google Drive，保留 Logseq 中的无关内容，避免重复任务，明确标记无法确认的字迹；除非用户明确要求，否则不会提交或推送 Logseq 仓库。
