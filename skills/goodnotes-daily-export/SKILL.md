@@ -36,6 +36,18 @@ swift scripts/export_goodnotes_daily.swift \
 
 根据脚本输出中的 `WROTE_MD`、`WROTE_DIFF`、`WROTE_PDF_VERSION` 和 `WROTE_ASSET` 定位本次生成的文件。出现 `ERROR` 时报告失败文件，不要静默跳过。
 
+## 定时任务提示词
+
+使用 `assets/goodnotes-daily-summary.md` 作为 OpenClaw、Hermes Agent 或其他调度器的任务提示词。不要让用户从文档手工复制整段提示词。
+
+创建定时任务时，读取该文件，并在消息末尾追加 `## 本次参数`，明确提供：
+
+- `Goodnotes PDF 源目录`
+- `输出目录`
+- 可选的 `目标日期`；未提供时由脚本使用本地日历中的昨天
+
+不要原地修改提示词资产。安装目录变化时，通过 Skill 根目录定位脚本，不要在提示词中写死 OpenClaw、Hermes 或 Codex 的全局安装路径。
+
 ## 输出规则
 
 - Markdown：`<output>/<base-name>.md`

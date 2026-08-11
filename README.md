@@ -40,7 +40,7 @@ npx skills add walkthewalktoday/skills --skill goodnotes-daily-export --agent op
 
 ### goodnotes-daily-export
 
-扫描指定日期发生变化的 Goodnotes PDF，生成 Markdown、文本差异、最近两个 PDF 快照，并为手写或图片型页面生成图片回退。附带脚本使用 macOS 的 PDFKit 与 AppKit。
+扫描指定日期发生变化的 Goodnotes PDF，生成 Markdown、文本差异、最近两个 PDF 快照，并为手写或图片型页面生成图片回退。附带脚本使用 macOS 的 PDFKit 与 AppKit，定时任务提示词位于 `assets/goodnotes-daily-summary.md`。
 
 调用示例：
 
