@@ -1,0 +1,4 @@
+interface:
+  display_name: "Goodnotes 每日导出"
+  short_description: "导出并比较每天变化的 Goodnotes PDF 笔记"
+  default_prompt: "使用 $goodnotes-daily-export 导出并总结昨天变化的 Goodnotes 笔记。"
